@@ -57,7 +57,7 @@ class PostWatcher:
                 on_error = self.on_error,
                 on_close = self.on_close,
                 on_open = self.on_open)
-        self.recipient = subscriber
+        self.recipient = recipient 
         self.include_rules = []
         self.exclude_rules = []
 
