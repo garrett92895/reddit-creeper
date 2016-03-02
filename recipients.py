@@ -1,5 +1,5 @@
 import praw
-from smtplib import SMTP
+import os
 import logger
 from chainnode import ChainNode
 """
@@ -22,7 +22,7 @@ class FilterRecipient(ChainNode):
         with self.lock:
             pass_on = len(self.filter_funcs > 0)
             for filter_func in self.filter_funcs:
-                pass_on and filter_func(message)
+                pass_on = pass_on and filter_func(message)
     
             if pass_on:
                 self.next_recipient.notify(message)
@@ -113,13 +113,11 @@ There is a lot of room for more features here, but considering I'm only using
 this for sending text messages to myself, this will suffice
 """
 class EmailerEndRecipient:
-    def __init__(self, host, from_email, to_email_list):
-        self.from_email = from_email
+    def __init__(self, to_email_list):
         self.to_email_list = to_email_list
-        self.host = host
 
     def notify(self, message):
-        logger.debug('Email Recipient sending ' + message + ' to ' + str(self.to_email_list))
-        with SMTP(self.host) as smtp:
-            for to_email in self.to_email_list:
-                smtp.sendmail(self.from_email, to_email, message)
+        logger.debug('Email Recipient sending ' + message['body'] + ' to ' + str(self.to_email_list))
+        for to_email in self.to_email_list:
+            command = 'echo "' + message['body'] + '" | mailx -s "' + message['subject'] + '" ' + to_email
+            os.system(command)
