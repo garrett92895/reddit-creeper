@@ -9,4 +9,5 @@ user_agent='python:reddit-creeper:v0.1 (by /u/garrett92895)'
 
 smtp_host='localhost'
 from_email='reddit-buddy@notify.me'
-to_email_list=['2073104071@tmomail.net']
+# put outgoing email here
+to_email_list=['']
